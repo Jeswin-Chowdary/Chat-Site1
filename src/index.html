@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-Website</title>
+    <script defer src="http://localhost:5000/socket.io/socket.io.js"></script>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" href="icon.jpg">
+</head>
+<body>
+    
+    <div class="message-container"></div>
+
+     <input type="text" id="input" class="input"  placeholder="Click to ENTER on your keyboard to send message" title="Send a message">
+     <button class="send-button" id="send-button">
+        <div class="backdrop">
+          <span>Send</span>
+        </div>
+        <div class="overlay">
+          <span>Send</span>
+        </div>
+      </button>
+
+     <audio src="./message.mp3" class="hidden"></audio>
+</body>
+</html>

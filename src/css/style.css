@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+:root {
+    --alabaster: #F5F5EB;
+    --beige: #EAE9D0;
+    --citrine: #E3DC0D;
+    --chili-red: #E3310D;
+    --murrey: #8F204F;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+  
+
+body {
+    background: url('../background.jpg');
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+.message-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;;
+    width: 90%;
+    gap: 15px;
+}
+.message {
+    width: 100%;
+    padding: 20px;
+    min-height: 2rem;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+.message:nth-child(even) {
+    animation: MessageAnimation1 300ms ease-in-out
+}
+.message:nth-child(odd) {
+    animation: MessageAnimation2 300ms ease-in-out
+}
+.msg-main {
+    font-size: 1.5rem;
+    max-width: 100%;
+}
+.input {
+    width: 90%;
+    padding: 20px;
+    height: 1.5rem;
+    background: black;
+    caret-color: white;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    margin-top: 1.5rem;
+}
+button {
+    appearance: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    isolation: isolate;
+}
+.send-button {
+    margin-top: 1rem;
+    isolation: isolate;
+    color: var(--alabaster);
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 600;
+    border-radius: 9999rem;
+    background: var(--chili-red);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 4rem;
+    overflow: hidden;
+    transition: 200ms ease-out;
+    
+    & > .backdrop {
+      z-index: 1;
+      transition: 150ms ease-out;
+    }
+    
+    & > .overlay {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: inherit;
+      background: var(--murrey);
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      transform: translateY(calc(100% + 1px));
+      transition: 200ms ease-out;
+    }
+    
+    &:is(:hover, :focus) {
+      background: color-mix(in oklab, var(--chili-red), black 40%);
+      transition: 250ms ease-out;
+      
+      & > .backdrop {
+       scale: 0.8;
+       opacity: 0.5;
+      }
+      & > .overlay {
+        transform: translateY(0);
+      }
+    }
+  }
+  
+.hidden {
+    display: none;
+}
+
+@keyframes MessageAnimation1 {
+    0%{
+        transform: translateX(-100%);
+    }
+}
+@keyframes MessageAnimation2 {
+    0%{
+        transform: translateX(100%);
+    }
+}
