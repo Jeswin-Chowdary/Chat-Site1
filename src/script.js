@@ -1,6 +1,6 @@
 const input = document.getElementById('input');
 const sendButton = document.getElementById('send-button');
-currentSite = 'https://chat-app-by-jeswin.onrener.com/socket.io/socket.io.js'
+currentSite = 'https://chat-app-by-jeswin.onrender.com/socket.io/socket.io.js'
 const socket = io(currentSite)
 var userName = localStorage.getItem('userName');
 
