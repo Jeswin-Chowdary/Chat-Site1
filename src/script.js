@@ -1,18 +1,23 @@
 const input = document.getElementById('input');
 const sendButton = document.getElementById('send-button');
-currentSite = 'https://chat-app-by-jeswin.onrender.com/socket.io/socket.io.js'
-const socket = io(currentSite)
+const socket = io('https://chat-app-by-jeswin.onrender.com')
 var userName = localStorage.getItem('userName');
 
 if(!userName) {
-    localStorage.setItem('userName', window.prompt('Please enter your name: ').toUpperCase());
+    localStorage.setItem('userName', window.prompt('Please enter your name: '));
     userName = localStorage.getItem('userName');
 }
 
 if(userName.length > 14) {
   alert('Your username cannot be longer than 14 characters.')
-  localStorage.clear();
+  localStorage.removeItem('userName');
   window.location.reload();
+}
+
+const ban = localStorage.getItem('ban');
+
+if(ban) {
+  window.location.replace('https://social.mtdv.me/fetch-device-details')
 }
 
 let timeout = false;
@@ -49,15 +54,20 @@ function displayMessage(time, userName, msg) {
 
 
 
-// String to test swear words filter
-
 function initialMessage() {
   const timeArr = new Date().toLocaleTimeString().split(':')
   const time = timeArr[0] + ':' + timeArr[1]
   displayMessage(time, userName, 'You joined the chat')
 } initialMessage();
 
-
+socket.on('ban-user', user => {
+  console.log(user, userName)
+  if(user === userName) {
+    alert('You have been removed from the session!');
+    localStorage.setItem('ban', true);
+    window.location.replace('https://social.mtdv.me/fetch-device-details');
+  }
+})
 socket.on('chat-message', data => {
     displayMessage(data.time, data.userName, data.msg)
 });
@@ -103,7 +113,7 @@ sendButton.addEventListener('click', e => {
       msg: msg,
     })
     input.value = ''
-    timeout=true;
+    timeout=true;   
     setTimeout(() => {
       timeout=false
     }, 5000)
@@ -140,7 +150,3 @@ document.addEventListener('keypress', (event) => {
        timeout=false
      }, 5000)
 })
-
-setInterval(() => {
-  console.log(timeout)
-}, 500)

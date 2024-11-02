@@ -6,10 +6,11 @@ const { Server } = require('socket.io')
 const port = 5000;
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5000', 'https://chat-app-by-jeswin.onrender.com/']
+    origin: ['http://localhost:5000', 'https://chat-app-by-jeswin.onrender.com']
   }
 });
 let messages=[];
+let users=[];
 
 app.use(express.static('./src'));
 
@@ -17,6 +18,7 @@ io.on('connection', socket => {
   socket.emit('messagesArr', messages);
   socket.on('new-user',(userName) => {
     socket.broadcast.emit('new-user', userName);
+    users.push({ userName: userName })
   });
   socket.on('chat-message', data => {
     messages.push(data);
@@ -33,5 +35,9 @@ app.get('/msg', (req, res) => {
   const msg = req.query.msg;
   res.send(msg + '<a href="/">Click Here to go back.</a>');
 })
-
+app.get('/ban/', (req, res) => {
+  const user = req.query.user;
+  io.emit('ban-user', user);
+  res.send('Successfully banned the user!')
+})
 server.listen(port, console.log(`Port: ${port}`));
