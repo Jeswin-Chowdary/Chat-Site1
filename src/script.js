@@ -90,7 +90,9 @@ socket.on('new-user', (user) => {
     const time = timeArr[0] + ':' + timeArr[1]
     displayMessage(time, 'CHAT-MODERATOR', `${user} just joined the chat.`);
 });
-socket.emit('new-user', userName);
+if(!ban) {
+  socket.emit('new-user', userName);
+}
 socket.on('messagesArr', messages => {
     messages.forEach(message => {
         displayMessage(message.time, message.userName, message.msg);
