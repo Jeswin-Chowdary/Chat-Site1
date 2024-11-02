@@ -1,6 +1,6 @@
 const input = document.getElementById('input');
 const sendButton = document.getElementById('send-button');
-const socket = io('https://chat-app-by-jeswin.onrender.com')  // http://localhost:5000
+const socket = io('http://localhost:5000')  // http://localhost:5000
 var userName = localStorage.getItem('userName');
 
 if(!userName) {

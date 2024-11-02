@@ -42,8 +42,18 @@ app.get('/msg', (req, res) => {
   res.send(msg + '<a href="/">Click Here to go back.</a>');
 })
 app.get('/ban/', (req, res) => {
+  const banMessages = [];
   const user = req.query.user;
   bannedUsers.push(user);
+  messages.forEach(message => {
+    if(message.userName === user) {
+      banMessages.push(message)
+    }
+  });
+  banMessages.forEach(message => {
+    index = messages.indexOf(message);
+    messages.splice(index, 1);
+  })
   io.emit('ban-user', user);
   res.send('Successfully banned the user!')
 })
