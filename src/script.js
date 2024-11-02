@@ -1,11 +1,23 @@
 const input = document.getElementById('input');
 const sendButton = document.getElementById('send-button');
-const socket = io('https://chat-app-by-jeswin.onrender.com')
+const socket = io('http://localhost:5000')  // http://localhost:5000
 var userName = localStorage.getItem('userName');
 
 if(!userName) {
-    localStorage.setItem('userName', window.prompt('Please enter your name: '));
+    let promptedName = window.prompt('Please enter your name:')
+
+    if(promptedName === "" || promptedName === " " || promptedName === "  " || promptedName === "   " ) {
+      console.log("cancelled the prompt")
+      window.location.reload()
+    }
+    localStorage.setItem('userName', promptedName);
     userName = localStorage.getItem('userName');
+
+}
+
+if(userName === "null") {
+  localStorage.removeItem('userName')
+  window.location.reload();
 }
 
 if(userName.length > 14) {
@@ -13,15 +25,11 @@ if(userName.length > 14) {
   localStorage.removeItem('userName');
   window.location.reload();
 }
+console.log(userName)
 
 const ban = localStorage.getItem('ban');
 
-if(ban) {
-  window.location.replace('https://social.mtdv.me/fetch-device-details')
-}
-
 let timeout = false;
-
 
 const url = window.location.href;
 const urlSplitted = url.split('#');
@@ -45,13 +53,20 @@ function displayMessage(time, userName, msg) {
     div.append(spanHead, spanMain);
     messageContainer.append(div);
 
-    const messageSound = document.querySelector('.hidden');
+    const messageSound = document.getElementById('message-sound');
     messageSound.play();
     var height = document.body.scrollHeight
     window.scroll(0, height);
 
 }
-
+document.documentElement.addEventListener('click', e => {
+  if(ban) {
+    document.documentElement.innerHTML = '<audio src="./song.mp3" class="hidden" id="rick-roll"></audio> You are now banned! Enjoy the Rick Roll :D, Please dont come back in incognito :)'
+    const rickRoll = document.getElementById('rick-roll');
+    rickRoll.play();
+  }
+  console.log('Ban status checked');
+})
 
 
 function initialMessage() {
@@ -63,9 +78,8 @@ function initialMessage() {
 socket.on('ban-user', user => {
   console.log(user, userName)
   if(user === userName) {
-    alert('You have been removed from the session!');
     localStorage.setItem('ban', true);
-    window.location.replace('https://social.mtdv.me/fetch-device-details');
+    window.location.reload();
   }
 })
 socket.on('chat-message', data => {
