@@ -10,15 +10,21 @@ const io = new Server(server, {
   }
 });
 let messages=[];
-let users=[];
+let bannedUsers=[];
 
 app.use(express.static('./src'));
 
 io.on('connection', socket => {
+  var isBanned;
+
   socket.emit('messagesArr', messages);
   socket.on('new-user',(userName) => {
-    socket.broadcast.emit('new-user', userName);
-    users.push({ userName: userName })
+    bannedUsers.forEach(user => {
+      isBanned = true;
+    })
+    if(!isBanned) {
+      socket.broadcast.emit('new-user', userName);
+    }
   });
   socket.on('chat-message', data => {
     messages.push(data);
@@ -37,6 +43,7 @@ app.get('/msg', (req, res) => {
 })
 app.get('/ban/', (req, res) => {
   const user = req.query.user;
+  bannedUsers.push(user);
   io.emit('ban-user', user);
   res.send('Successfully banned the user!')
 })
